@@ -36,20 +36,7 @@ public class UserRepository {
         userValues.put(COLUMN_USERNAME, user.getUserName());
         userValues.put(COLUMN_EMAIL_ADDRESS, user.getEmailAddress());
         userValues.put(COLUMN_PASSWORD, user.getPassword());
-        userValues.put(COLUMN_TOKEN, user.getToken());
         db.insert(TABLE_USER, null, userValues);
         db.close();
-    }
-
-    public int update(User user) {
-        SQLiteDatabase db = DatabaseVersion.getInstance(this.context).getWritableDatabase();
-        ContentValues userValue = new ContentValues();
-        userValue.put(COLUMN_USERNAME, user.getUserName());
-        userValue.put(COLUMN_EMAIL_ADDRESS, user.getEmailAddress());
-        userValue.put(COLUMN_PASSWORD, user.getPassword());
-        userValue.put(COLUMN_TOKEN, user.getToken());
-        int rowsAffected = db.update(TABLE_USER, userValue, COLUMN_ID + "=?", new String[]{String.valueOf(user.getId())});
-        db.close();
-        return rowsAffected;
     }
 }

@@ -1,7 +1,10 @@
 package com.myleshumphreys.joinin.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.myleshumphreys.joinin.R;
 import com.myleshumphreys.joinin.repositories.UserRepository;
 import com.myleshumphreys.joinin.validation.InputValidation;
@@ -31,6 +36,10 @@ public class LoginActivity extends Activity {
         addTextWatcher();
         registerButtonListener();
         loginButtonListener();
+
+        if ( !HasInternetConnection()) {
+            Toast.makeText(getApplicationContext(), "Check your Internet access", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupWidgets() {
@@ -113,6 +122,16 @@ public class LoginActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean HasInternetConnection () {
+        ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo NetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (NetworkInfo != null && NetworkInfo.isConnectedOrConnecting()) {
+            return true ;
+        } else {
+            return false ;
+        }
     }
 
     private void EndActivity() {

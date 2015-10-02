@@ -7,13 +7,21 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.myleshumphreys.joinin.ApiMethods.IApiService;
 import com.myleshumphreys.joinin.R;
+import com.myleshumphreys.joinin.models.User;
 import com.myleshumphreys.joinin.repositories.UserRepository;
 import com.myleshumphreys.joinin.validation.InputValidation;
 
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import java.net.HttpURLConnection;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class RegisterActivity extends Activity {
 
@@ -47,18 +55,43 @@ public class RegisterActivity extends Activity {
                 String userName = String.valueOf(editTextRegisterUserName.getText());
                 String emailAddress = String.valueOf(editTextRegisterEmailAddress.getText());
                 String password = String.valueOf(editTextRegisterPassword.getText());
-                String userInfo = "Value{" + "UserName=" + userName + "Email=" + emailAddress + ", Password'" + password + '\'' + '}';
-                RegisterUser(userInfo);
+                User user = new User(userName, emailAddress, password);
+                RegisterUser(user);
             }
         });
     }
 
-    private void RegisterUser(String userInfo)
-    {
-        String url = "http://joinin.azurewebsites.net/api/Account/Register";
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-        String result = restTemplate.getForObject(url, String.class, "userInfo");
+    public static final String BASE_URL = "http://joinin.azurewebsites.net";
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    private void RegisterUser(User user) {
+        IApiService apiService = retrofit.create(IApiService.class);
+
+        Call<User> call = apiService.registerUser(user);
+        call.enqueue(new Callback<User>() {
+
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                int statusCode = response.code();
+                User user = response.body();
+                    
+                if(statusCode == HttpURLConnection.HTTP_ACCEPTED) {
+                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                }
+                if(statusCode == HttpURLConnection.HTTP_BAD_REQUEST) {
+                    Toast.makeText(getApplicationContext(), "Bad Request", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                // Log error here since request failed
+                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getUserInput(EditText editTextEmailAddress, EditText editTextPassword) {
