@@ -1,13 +1,13 @@
 package com.myleshumphreys.joinin.models;
 
-public class User {
+public class Account {
     private String username;
-    private String emailAddress;
+    private String email;
     private String password;
 
-    public User(String username, String emailAddress, String password) {
+    public Account(String username, String email, String password) {
         this.username = username;
-        this.emailAddress = emailAddress;
+        this.email = email;
         this.password = password;
     }
 
@@ -15,8 +15,8 @@ public class User {
         return this.username;
     }
 
-    public String getEmailAddress() {
-        return this.emailAddress;
+    public String getEmail() {
+        return this.email;
     }
 
     public String getPassword() {

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import com.myleshumphreys.joinin.data.DatabaseVersion;
-import com.myleshumphreys.joinin.models.User;
+import com.myleshumphreys.joinin.models.Account;
 
 public class UserRepository {
 
@@ -30,12 +30,12 @@ public class UserRepository {
         this.context = context;
     }
 
-    public void create(User user) {
+    public void create(Account account) {
         SQLiteDatabase db = DatabaseVersion.getInstance(this.context).getWritableDatabase();
         ContentValues userValues = new ContentValues();
-        userValues.put(COLUMN_USERNAME, user.getUserName());
-        userValues.put(COLUMN_EMAIL_ADDRESS, user.getEmailAddress());
-        userValues.put(COLUMN_PASSWORD, user.getPassword());
+        userValues.put(COLUMN_USERNAME, account.getUserName());
+        userValues.put(COLUMN_EMAIL_ADDRESS, account.getEmail());
+        userValues.put(COLUMN_PASSWORD, account.getPassword());
         db.insert(TABLE_USER, null, userValues);
         db.close();
     }

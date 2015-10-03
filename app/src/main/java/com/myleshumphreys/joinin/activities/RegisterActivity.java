@@ -9,14 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.myleshumphreys.joinin.ApiMethods.IApiService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.myleshumphreys.joinin.RetrofitService.IApiService;
 import com.myleshumphreys.joinin.R;
-import com.myleshumphreys.joinin.models.User;
-import com.myleshumphreys.joinin.repositories.UserRepository;
+import com.myleshumphreys.joinin.RetrofitService.ResponseHandler;
+import com.myleshumphreys.joinin.models.Account;
 import com.myleshumphreys.joinin.validation.InputValidation;
+import com.squareup.okhttp.ResponseBody;
 
-import java.net.HttpURLConnection;
-
+import java.io.IOException;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -28,8 +30,13 @@ public class RegisterActivity extends Activity {
     private EditText editTextRegisterUserName;
     private EditText editTextRegisterEmailAddress;
     private EditText editTextRegisterPassword;
-    private UserRepository userRepository;
     private Button buttonRegister;
+
+    private final String baseUrl = "http://joinin.azurewebsites.net/";
+    private Retrofit retrofit;
+    private IApiService apiService;
+    private ResponseHandler responseHandler;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class RegisterActivity extends Activity {
         setupWidgets();
         addTextWatcher();
         registerButtonListener();
+        setupRetrofit();
     }
 
     private void setupWidgets() {
@@ -55,40 +63,52 @@ public class RegisterActivity extends Activity {
                 String userName = String.valueOf(editTextRegisterUserName.getText());
                 String emailAddress = String.valueOf(editTextRegisterEmailAddress.getText());
                 String password = String.valueOf(editTextRegisterPassword.getText());
-                User user = new User(userName, emailAddress, password);
-                RegisterUser(user);
+                Account account = new Account(userName, emailAddress, password);
+                RegisterAccount(account);
             }
         });
     }
 
-    public static final String BASE_URL = "http://joinin.azurewebsites.net";
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
+    private void setupRetrofit()
+    {
+        gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
 
-    private void RegisterUser(User user) {
-        IApiService apiService = retrofit.create(IApiService.class);
+        retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
 
-        Call<User> call = apiService.registerUser(user);
-        call.enqueue(new Callback<User>() {
+        apiService = retrofit.create(IApiService.class);
+    }
+
+    private void RegisterAccount(Account account) {
+        Call<ResponseBody> call = apiService.registerAccount(account);
+        call.enqueue(new Callback<ResponseBody>() {
 
             @Override
-            public void onResponse(Response<User> response, Retrofit retrofit) {
+            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
                 int statusCode = response.code();
-                User user = response.body();
-                    
-                if(statusCode == HttpURLConnection.HTTP_ACCEPTED) {
-                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+
+                if(response.body() != null)
+                {
+                    RegisteredAccount();
                 }
-                if(statusCode == HttpURLConnection.HTTP_BAD_REQUEST) {
-                    Toast.makeText(getApplicationContext(), "Bad Request", Toast.LENGTH_SHORT).show();
+
+                if(response.errorBody() != null)
+                {
+                    try {
+                        String test = response.errorBody().string();
+                        Toast.makeText(getApplicationContext(), test, Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                // Log error here since request failed
                 Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -131,6 +151,12 @@ public class RegisterActivity extends Activity {
             getUserInput(editTextRegisterEmailAddress, editTextRegisterPassword);
         }
     };
+
+    private void RegisteredAccount()
+    {
+        Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
+        endActivity();
+    }
 
     private void endActivity() {
         RegisterActivity.this.finish();
