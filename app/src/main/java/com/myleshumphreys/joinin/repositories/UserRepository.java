@@ -3,6 +3,7 @@ package com.myleshumphreys.joinin.repositories;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.myleshumphreys.joinin.data.DatabaseVersion;
 import com.myleshumphreys.joinin.models.Account;
 

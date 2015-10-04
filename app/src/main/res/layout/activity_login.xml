@@ -24,6 +24,7 @@
         android:id="@+id/textLoginUserName"
         android:focusableInTouchMode="true"
         android:hint="Username"
+        android:textColorHint="#A4A4A4"
         android:background="@drawable/edit_text_style"
         android:padding="10dp"
         android:layout_marginBottom="10dp"
@@ -41,6 +42,7 @@
         android:id="@+id/textLoginPassword"
         android:focusableInTouchMode="true"
         android:hint="Password"
+        android:textColorHint="#A4A4A4"
         android:background="@drawable/edit_text_style"
         android:padding="10dp"
         android:layout_marginLeft="20dp"
@@ -49,7 +51,6 @@
         android:drawableLeft="@drawable/ic_action_secure"
         android:drawablePadding="5dp"
         android:textCursorDrawable="@null"/>
-
 
     <Button
         android:text="Join In"

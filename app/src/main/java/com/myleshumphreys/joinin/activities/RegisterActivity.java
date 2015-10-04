@@ -13,12 +13,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.myleshumphreys.joinin.RetrofitService.IApiService;
 import com.myleshumphreys.joinin.R;
-import com.myleshumphreys.joinin.RetrofitService.ResponseHandler;
+import com.myleshumphreys.joinin.RetrofitService.RegisterResponse.RegisterResponse;
 import com.myleshumphreys.joinin.models.Account;
 import com.myleshumphreys.joinin.validation.InputValidation;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
+
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -35,7 +36,6 @@ public class RegisterActivity extends Activity {
     private final String baseUrl = "http://joinin.azurewebsites.net/";
     private Retrofit retrofit;
     private IApiService apiService;
-    private ResponseHandler responseHandler;
     private Gson gson;
 
     @Override
@@ -69,8 +69,7 @@ public class RegisterActivity extends Activity {
         });
     }
 
-    private void setupRetrofit()
-    {
+    private void setupRetrofit() {
         gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
@@ -91,16 +90,15 @@ public class RegisterActivity extends Activity {
             public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
                 int statusCode = response.code();
 
-                if(response.body() != null)
-                {
+                if (response.body() != null) {
                     RegisteredAccount();
                 }
 
-                if(response.errorBody() != null)
-                {
+                if (response.errorBody() != null) {
                     try {
-                        String test = response.errorBody().string();
-                        Toast.makeText(getApplicationContext(), test, Toast.LENGTH_LONG).show();
+                        String errorBodyString = response.errorBody().string();
+                        RegisterResponse registerResponse = gson.fromJson(errorBodyString, RegisterResponse.class);
+                        Toast.makeText(getApplicationContext(), errorBodyString, Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -152,8 +150,7 @@ public class RegisterActivity extends Activity {
         }
     };
 
-    private void RegisteredAccount()
-    {
+    private void RegisteredAccount() {
         Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
         endActivity();
     }

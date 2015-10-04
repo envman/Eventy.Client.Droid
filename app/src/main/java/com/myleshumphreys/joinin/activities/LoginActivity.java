@@ -8,15 +8,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.myleshumphreys.joinin.R;
-import com.myleshumphreys.joinin.repositories.UserRepository;
 import com.myleshumphreys.joinin.validation.InputValidation;
 
 public class LoginActivity extends Activity {
@@ -25,20 +22,18 @@ public class LoginActivity extends Activity {
     private EditText editTextPassword;
     private Button buttonLogin;
     private Button buttonRegister;
-    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        userRepository = new UserRepository(getApplicationContext());
         setupWidgets();
         addTextWatcher();
         registerButtonListener();
         loginButtonListener();
 
-        if ( !HasInternetConnection()) {
-            Toast.makeText(getApplicationContext(), "Check your Internet access", Toast.LENGTH_SHORT).show();
+        if (!HasInternetConnection()) {
+            Toast.makeText(getApplicationContext(), "Check your Internet access", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -107,30 +102,13 @@ public class LoginActivity extends Activity {
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public boolean HasInternetConnection () {
-        ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean HasInternetConnection() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo NetworkInfo = connectivityManager.getActiveNetworkInfo();
         if (NetworkInfo != null && NetworkInfo.isConnectedOrConnecting()) {
-            return true ;
+            return true;
         } else {
-            return false ;
+            return false;
         }
     }
 

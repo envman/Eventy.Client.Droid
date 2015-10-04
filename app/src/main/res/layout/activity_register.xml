@@ -1,79 +1,85 @@
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#D8D8D8"
+    android:orientation="vertical"
+    tools:context="com.myleshumphreys.joinin.activities.RegisterActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="70dp"
+        android:padding="10dp"
+        android:text="Register"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/textRegisterUserName"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#D8D8D8"
-        android:orientation="vertical"
-        tools:context="com.myleshumphreys.joinin.activities.RegisterActivity">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edit_text_style"
+        android:drawableLeft="@drawable/ic_action_person"
+        android:drawablePadding="5dp"
+        android:focusableInTouchMode="true"
+        android:hint="Username"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textColorHint="#A4A4A4"
+        android:textCursorDrawable="@null" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Register"
-            android:padding="10dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginTop="70dp"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal" />
+    <EditText
+        android:id="@+id/textRegisterEmailAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edit_text_style"
+        android:drawableLeft="@drawable/ic_action_email"
+        android:drawablePadding="5dp"
+        android:focusableInTouchMode="true"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textColorHint="#A4A4A4"
+        android:textCursorDrawable="@null" />
 
-     <EditText
-         android:id="@+id/textRegisterUserName"
-         android:background="@drawable/edit_text_style"
-         android:drawableLeft="@drawable/ic_action_person"
-         android:hint="Username"
-         android:textCursorDrawable="@null"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:padding="10dp"
-         android:layout_marginBottom="10dp"
-         android:layout_marginLeft="20dp"
-         android:layout_marginRight="20dp"
-         android:textColor="#000"
-         android:drawablePadding="5dp"/>
+    <EditText
+        android:id="@+id/textRegisterPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edit_text_style"
+        android:drawableLeft="@drawable/ic_action_secure"
+        android:drawablePadding="5dp"
+        android:focusableInTouchMode="true"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textColorHint="#A4A4A4"
+        android:textCursorDrawable="@null" />
 
-        <EditText
-            android:id="@+id/textRegisterEmailAddress"
-            android:background="@drawable/edit_text_style"
-            android:drawableLeft="@drawable/ic_action_email"
-            android:hint="Email Address"
-            android:textCursorDrawable="@null"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textColor="#000"
-            android:drawablePadding="5dp"/>
-
-        <EditText
-            android:id="@+id/textRegisterPassword"
-            android:background="@drawable/edit_text_style"
-            android:drawableLeft="@drawable/ic_action_secure"
-            android:hint="Password"
-            android:textCursorDrawable="@null"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textColor="#000"
-            android:drawablePadding="5dp"/>
-
-        <Button
-            android:id="@+id/buttonCreateUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button_selector"
-            android:padding="10dp"
-            android:text="Register"
-            android:textColor="#FFFFFF" />
- </LinearLayout>
+    <Button
+        android:id="@+id/buttonCreateUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_selector"
+        android:padding="10dp"
+        android:text="Register"
+        android:textColor="#FFFFFF" />
+</LinearLayout>
