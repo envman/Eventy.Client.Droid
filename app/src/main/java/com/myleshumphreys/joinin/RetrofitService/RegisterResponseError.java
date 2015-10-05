@@ -7,11 +7,11 @@ import java.util.List;
 public class RegisterResponseError {
 
     @SerializedName("model.UserName")
-    private List<String> ModelUserName;
+    public List<String> ModelUserName;
 
     @SerializedName("model.Email")
-    private List<String> ModelEmail;
+    public List<String> ModelEmail;
 
     @SerializedName("model.Password")
-    private List<String> ModelPassword;
+    public List<String> ModelPassword;
 }

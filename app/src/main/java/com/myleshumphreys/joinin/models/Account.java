@@ -1,9 +1,9 @@
 package com.myleshumphreys.joinin.models;
 
 public class Account {
-    private String username;
-    private String email;
-    private String password;
+    public String username;
+    public String email;
+    public String password;
 
     public Account(String username, String email, String password) {
         this.username = username;

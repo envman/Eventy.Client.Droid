@@ -4,10 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class RegisterResponse {
 
-    private String Message;
+    @SerializedName("access_token")
+    public String AccessToken;
 
-    private RegisterResponseError ModelState;
+    public String Message;
+
+    public RegisterResponseError ModelState;
 
     @SerializedName("error")
-    private String Error;
+    public String Error;
 }

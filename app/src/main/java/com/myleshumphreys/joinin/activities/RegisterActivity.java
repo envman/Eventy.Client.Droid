@@ -1,7 +1,9 @@
 package com.myleshumphreys.joinin.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,7 +22,10 @@ import com.myleshumphreys.joinin.validation.InputValidation;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit.Call;
@@ -35,6 +40,9 @@ public class RegisterActivity extends Activity {
     private EditText editTextRegisterEmailAddress;
     private EditText editTextRegisterPassword;
     private Button buttonRegister;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    public static final String ApplicationPreferences = "ApplicationPreferences" ;
 
     private final String baseUrl = "http://joinin.azurewebsites.net/";
     private Retrofit retrofit;
@@ -85,7 +93,7 @@ public class RegisterActivity extends Activity {
         apiService = retrofit.create(IApiService.class);
     }
 
-    private void registerAccount(Account account) {
+    private void registerAccount(final Account account) {
         Call<ResponseBody> call = apiService.registerAccount(account);
         call.enqueue(new Callback<ResponseBody>() {
 
@@ -94,7 +102,9 @@ public class RegisterActivity extends Activity {
                 int statusCode = response.code();
 
                 if (response.body() != null) {
-                    registeredAccount();
+                    if (statusCode == HttpURLConnection.HTTP_OK) {
+                        getToken(account.username, account.password);
+                    }
                 }
 
                 if (response.errorBody() != null) {
@@ -110,41 +120,14 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(getApplicationContext(), "Failed to register", Toast.LENGTH_SHORT).show();
+                // Log
             }
         });
     }
 
-    private void registeredAccount() {
-        String userName = String.valueOf(editTextRegisterUserName.getText());
-        String password = String.valueOf(editTextRegisterPassword.getText());
-
-        String token = getToken(userName, password);
-        if(InputValidation.IsNotNullOrEmpty(token))
-        {
-            Intent intentEvent = new Intent(getApplicationContext(), EventActivity.class);
-            //store token in shared preferences
-            intentEvent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intentEvent);
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Failed to get token", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private String getToken(String username, String password) {
-        Map<String, String> grantTypeMap = new HashMap<>();
-        grantTypeMap.put("grant_type", "password");
-
-        Map<String, String> usernameMap = new HashMap<>();
-        usernameMap.put("username", username);
-
-        Map<String, String> passwordMap = new HashMap<>();
-        passwordMap.put("password", password);
-
-        String token = null;
-        Call<ResponseBody> call = apiService.getToken(grantTypeMap, usernameMap, passwordMap);
+    private void getToken(String username, String password) {
+        List<Map<String, String>> mappings = createRequestMappings(username, password);
+        Call<ResponseBody> call = apiService.getToken(mappings.get(0), mappings.get(1), mappings.get(2));
         call.enqueue(new Callback<ResponseBody>() {
 
             @Override
@@ -153,7 +136,12 @@ public class RegisterActivity extends Activity {
 
                 if (response.body() != null) {
                     try {
-                        String bodyString = response.body().string();
+                        if (statusCode == HttpURLConnection.HTTP_OK) {
+                            String bodyString = response.body().string();
+                            RegisterResponse tokenResponse = gson.fromJson(bodyString, RegisterResponse.class);
+                            loginUser(tokenResponse.AccessToken);
+                        }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -172,10 +160,46 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(getApplicationContext(), "Failed to get token", Toast.LENGTH_SHORT).show();
+                // Log
             }
         });
-        return token;
+    }
+
+    private void loginUser(String token) {
+        if (InputValidation.IsNotNullOrEmpty(token)) {
+            Intent intentEvent = new Intent(getApplicationContext(), EventActivity.class);
+            storeToken(token);
+            intentEvent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentEvent);
+            Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Invalid Token", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private List<Map<String, String>> createRequestMappings(String username, String password) {
+        List<Map<String, String>> mappings = new ArrayList<>();
+
+        Map<String, String> grantTypeMap = new HashMap<>();
+        grantTypeMap.put("grant_type", "password");
+        mappings.add(grantTypeMap);
+
+        Map<String, String> userNameMap = new HashMap<>();
+        userNameMap.put("username", username);
+        mappings.add(userNameMap);
+
+        Map<String, String> passwordMap = new HashMap<>();
+        passwordMap.put("password", password);
+        mappings.add(passwordMap);
+
+        return mappings;
+    }
+
+    private void storeToken(String token) {
+        sharedPreferences = getSharedPreferences(ApplicationPreferences, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("token", token);
+        editor.commit();
     }
 
     private void getUserInput(EditText editTextEmailAddress, EditText editTextPassword) {
