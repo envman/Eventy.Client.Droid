@@ -3,6 +3,7 @@ package com.myleshumphreys.joinin.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -22,19 +23,34 @@ public class LoginActivity extends Activity {
     private EditText editTextPassword;
     private Button buttonLogin;
     private Button buttonRegister;
+    private SharedPreferences sharedPreferences;
+    public static final String ApplicationPreferences = "ApplicationPreferences" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkInternetConnection();
+        checkSharedPreferences();
+    }
+
+    private void checkSharedPreferences() {
+        sharedPreferences = getSharedPreferences(ApplicationPreferences, Context.MODE_PRIVATE);
+        String dataReturned = sharedPreferences.getString("token", "");
+        if (InputValidation.IsNotNullOrEmpty(dataReturned)) {
+            startEventActivity();
+            endActivity();
+
+        } else {
+            setupActivity();
+        }
+    }
+
+    private void setupActivity() {
         setContentView(R.layout.activity_login);
         setupWidgets();
         addTextWatcher();
         registerButtonListener();
         loginButtonListener();
-
-        if (!HasInternetConnection()) {
-            Toast.makeText(getApplicationContext(), "Check your Internet access", Toast.LENGTH_LONG).show();
-        }
     }
 
     private void setupWidgets() {
@@ -42,6 +58,12 @@ public class LoginActivity extends Activity {
         editTextPassword = (EditText) findViewById(R.id.textLoginPassword);
         buttonLogin = (Button) findViewById(R.id.buttonLogIn);
         buttonRegister = (Button) findViewById(R.id.buttonRegister);
+    }
+
+    private void startEventActivity()
+    {
+        Intent intentEvent = new Intent(getApplicationContext(), EventActivity.class);
+        startActivity(intentEvent);
     }
 
     private void registerButtonListener() {
@@ -71,8 +93,8 @@ public class LoginActivity extends Activity {
     }
 
     private void checkFieldsForEmptyValues(String username, String password) {
-        boolean validUserName = InputValidation.IsNullOrEmpty(username);
-        boolean validPassword = InputValidation.IsNullOrEmpty(password);
+        boolean validUserName = InputValidation.IsNotNullOrEmpty(username);
+        boolean validPassword = InputValidation.IsNotNullOrEmpty(password);
 
         if (validUserName && validPassword) {
             buttonLogin.setEnabled(true);
@@ -102,7 +124,14 @@ public class LoginActivity extends Activity {
         }
     };
 
-    public boolean HasInternetConnection() {
+    private void checkInternetConnection()
+    {
+        if (!hasInternetConnection()) {
+            Toast.makeText(getApplicationContext(), "Check your Internet access", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean hasInternetConnection() {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo NetworkInfo = connectivityManager.getActiveNetworkInfo();
         if (NetworkInfo != null && NetworkInfo.isConnectedOrConnecting()) {
@@ -112,7 +141,7 @@ public class LoginActivity extends Activity {
         }
     }
 
-    private void EndActivity() {
+    private void endActivity() {
         LoginActivity.this.finish();
     }
 }
