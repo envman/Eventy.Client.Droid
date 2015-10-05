@@ -1,16 +1,13 @@
-package com.myleshumphreys.joinin.RetrofitService;
+package com.myleshumphreys.joinin.RetrofitService.RegisterResponse;
 
 import com.google.gson.annotations.SerializedName;
 
 public class RegisterResponse {
 
-    @SerializedName("access_token")
-    public String AccessToken;
-
     public String Message;
-
-    public RegisterResponseError ModelState;
 
     @SerializedName("error")
     public String Error;
+
+    public RegisterResponseError ModelState;
 }

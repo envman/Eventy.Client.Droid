@@ -1,4 +1,4 @@
-package com.myleshumphreys.joinin.RetrofitService;
+package com.myleshumphreys.joinin.RetrofitService.RegisterResponse;
 
 import com.google.gson.annotations.SerializedName;
 

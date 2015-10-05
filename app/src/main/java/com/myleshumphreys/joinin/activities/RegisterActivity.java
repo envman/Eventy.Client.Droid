@@ -16,7 +16,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.myleshumphreys.joinin.RetrofitService.IApiService;
 import com.myleshumphreys.joinin.R;
-import com.myleshumphreys.joinin.RetrofitService.RegisterResponse;
+import com.myleshumphreys.joinin.RetrofitService.RegisterResponse.RegisterResponse;
+import com.myleshumphreys.joinin.RetrofitService.TokenResponse.TokenResponse;
+import com.myleshumphreys.joinin.RetrofitService.TokenResponse.TokenResponseError;
 import com.myleshumphreys.joinin.models.Account;
 import com.myleshumphreys.joinin.validation.InputValidation;
 import com.squareup.okhttp.ResponseBody;
@@ -138,7 +140,7 @@ public class RegisterActivity extends Activity {
                     try {
                         if (statusCode == HttpURLConnection.HTTP_OK) {
                             String bodyString = response.body().string();
-                            RegisterResponse tokenResponse = gson.fromJson(bodyString, RegisterResponse.class);
+                            TokenResponse tokenResponse = gson.fromJson(bodyString, TokenResponse.class);
                             loginUser(tokenResponse.AccessToken);
                         }
 
@@ -150,7 +152,7 @@ public class RegisterActivity extends Activity {
                 if (response.errorBody() != null) {
                     try {
                         String errorBodyString = response.errorBody().string();
-                        RegisterResponse tokenResponse = gson.fromJson(errorBodyString, RegisterResponse.class);
+                        TokenResponseError tokenResponse = gson.fromJson(errorBodyString, TokenResponseError.class);
                         Toast.makeText(getApplicationContext(), errorBodyString, Toast.LENGTH_LONG).show();
                     } catch (IOException e) {
                         e.printStackTrace();
