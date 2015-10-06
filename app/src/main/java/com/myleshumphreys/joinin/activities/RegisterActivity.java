@@ -44,8 +44,7 @@ public class RegisterActivity extends Activity {
     private Button buttonRegister;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    public static final String ApplicationPreferences = "ApplicationPreferences" ;
-
+    public static final String ApplicationPreferences = "ApplicationPreferences";
     private final String baseUrl = "http://joinin.azurewebsites.net/";
     private Retrofit retrofit;
     private IApiService apiService;
