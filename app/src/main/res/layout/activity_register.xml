@@ -25,7 +25,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_style"
-        android:drawableLeft="@drawable/ic_action_person"
+        android:drawableLeft="@drawable/ic_person_outline_black_18dp"
         android:drawablePadding="5dp"
         android:focusableInTouchMode="true"
         android:hint="Username"
@@ -42,7 +42,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_style"
-        android:drawableLeft="@drawable/ic_action_email"
+        android:drawableLeft="@drawable/ic_mail_black_18dp"
         android:drawablePadding="5dp"
         android:focusableInTouchMode="true"
         android:hint="Email Address"
@@ -60,7 +60,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_style"
-        android:drawableLeft="@drawable/ic_action_secure"
+        android:drawableLeft="@drawable/ic_lock_outline_black_18dp"
         android:drawablePadding="5dp"
         android:focusableInTouchMode="true"
         android:hint="Password"
@@ -71,7 +71,7 @@
         android:textCursorDrawable="@null" />
 
     <Button
-        android:id="@+id/buttonCreateUser"
+        android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

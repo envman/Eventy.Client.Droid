@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:background="#D8D8D8"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context="com.myleshumphreys.joinin.activities.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:textColor="#000"
-        android:drawableLeft="@drawable/ic_action_person"
+        android:drawableLeft="@drawable/ic_person_outline_black_18dp"
         android:drawablePadding="5dp"
         android:textCursorDrawable="@null"/>
 
@@ -48,7 +48,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:textColor="#000"
-        android:drawableLeft="@drawable/ic_action_secure"
+        android:drawableLeft="@drawable/ic_lock_outline_black_18dp"
         android:drawablePadding="5dp"
         android:textCursorDrawable="@null"/>
 

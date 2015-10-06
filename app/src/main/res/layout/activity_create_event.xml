@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#D8D8D8"
+        android:orientation="vertical"
+        tools:context="com.myleshumphreys.joinin.activities.CreateEventActivity">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:text="Event"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/textEventName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/edit_text_style"
+            android:drawablePadding="5dp"
+            android:focusableInTouchMode="true"
+            android:hint="Event Name"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textColorHint="#A4A4A4"
+            android:textCursorDrawable="@null" />
+
+        <EditText
+            android:id="@+id/textEventDescription"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/edit_text_style"
+            android:drawablePadding="5dp"
+            android:focusableInTouchMode="true"
+            android:hint="Description"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textColorHint="#A4A4A4"
+            android:textCursorDrawable="@null" />
+
+        <EditText
+            android:id="@+id/textEventLocation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/edit_text_style"
+            android:drawablePadding="5dp"
+            android:focusableInTouchMode="true"
+            android:hint="Location"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textColorHint="#A4A4A4"
+            android:textCursorDrawable="@null" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="GetDatePickerDialog"
+            android:padding="10dp"
+            android:text="Start Date"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="GetTimePickerDialog"
+            android:padding="10dp"
+            android:text="Start Time"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="GetDatePickerDialog"
+            android:padding="10dp"
+            android:text="End Date"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="GetTimePickerDialog"
+            android:padding="10dp"
+            android:text="End Time"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/buttonCreateEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector"
+            android:padding="10dp"
+            android:text="Create Event"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

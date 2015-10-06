@@ -23,8 +23,6 @@ public class EventActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        //Get token out of shared preferences
-        //Setup retrofit for new auth headers
     }
 
     @Override
@@ -32,6 +30,11 @@ public class EventActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_event, menu);
         return true;
+    }
+
+    private void createEvent() {
+        Intent intentCreateAccount = new Intent(getApplicationContext(), CreateEventActivity.class);
+        startActivity(intentCreateAccount);
     }
 
     private void logout() {
@@ -73,8 +76,8 @@ public class EventActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_add_event) {
-            /// create event
+        if (id == R.id.action_create_event) {
+            createEvent();
             return true;
         }
 

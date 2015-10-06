@@ -65,7 +65,7 @@ public class RegisterActivity extends Activity {
         editTextRegisterUserName = (EditText) findViewById(R.id.textRegisterUserName);
         editTextRegisterEmailAddress = (EditText) findViewById(R.id.textRegisterEmailAddress);
         editTextRegisterPassword = (EditText) findViewById(R.id.textRegisterPassword);
-        buttonRegister = (Button) findViewById(R.id.buttonCreateUser);
+        buttonRegister = (Button) findViewById(R.id.buttonRegister);
     }
 
     private void registerButtonListener() {
