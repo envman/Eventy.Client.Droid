@@ -1,9 +1,13 @@
 package com.myleshumphreys.joinin.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -36,11 +40,15 @@ public class CreateEventActivity extends ActionBarActivity {
     private Button buttonSelectImage;
     private Button buttonCreateEvent;
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static int RESULT_LOAD_IMG = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
         setupWidgets();
+        selectImageButtonListener();
         //get shared preferences
     }
 
@@ -49,7 +57,50 @@ public class CreateEventActivity extends ActionBarActivity {
         editTextEventName = (EditText) findViewById(R.id.editTextEventName);
         editTextEventDecription = (EditText) findViewById(R.id.editTextEventDescription);
         editTextEventLocation = (EditText) findViewById(R.id.editTextEventName);
+        buttonSelectImage = (Button) findViewById(R.id.buttonSelectImage);
         buttonCreateEvent = (Button) findViewById(R.id.buttonCreateEvent);
+    }
+
+    private void selectImageButtonListener()
+    {
+        buttonSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateEventActivity.this);
+                builder.setTitle("Location")
+                        .setItems(R.array.select_image_dialog_array, new DialogInterface.OnClickListener() {
+                                            public void onClick (DialogInterface dialog,int which){
+                                                if (which == 0) {
+                                                    dispatchTakePictureIntent();
+                                                }
+                                                if (which == 1) {
+                                                    dispatchGalleryIntent();
+                                                }
+                                                if (which == 2) {
+
+                                                }
+                                            }
+                                        }
+
+                                );
+                builder.show();
+            }
+        });
+
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    private void dispatchGalleryIntent()
+    {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
     public void eventStartDatePicker(View view) {

@@ -4,4 +4,10 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_event">EventActivity</string>
     <string name="title_activity_create_event">CreateEventActivity</string>
+
+    <string-array name="select_image_dialog_array">
+        <item>Camera</item>
+        <item>Gallery</item>
+        <item>Cancel</item>
+    </string-array>
 </resources>
