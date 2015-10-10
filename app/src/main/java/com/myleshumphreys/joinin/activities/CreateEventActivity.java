@@ -6,19 +6,24 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.support.v4.app.DialogFragment;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 
 import com.myleshumphreys.joinin.R;
-
 import java.util.Calendar;
 
 public class CreateEventActivity extends ActionBarActivity {
@@ -32,6 +37,9 @@ public class CreateEventActivity extends ActionBarActivity {
     private Button buttonEventEndDate;
     private Button buttonEventEndTime;
 
+    private ImageView imageViewImage;
+    private Bitmap imageBitmap;
+
     private String eventStartDate;
     private String eventStartTime;
     private String eventEndDate;
@@ -40,8 +48,11 @@ public class CreateEventActivity extends ActionBarActivity {
     private Button buttonSelectImage;
     private Button buttonCreateEvent;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static int RESULT_LOAD_IMG = 1;
+    private int REQUEST_IMAGE_CAPTURE = 1;
+    private int REQUEST_SELECT_FILE = 1;
+    private int RESULT_LOAD_IMG = 1;
+    private int REQUEST_FROM_GALLERY;
+    private int REQUEST_FROM_CAMERA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,7 @@ public class CreateEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_create_event);
         setupWidgets();
         selectImageButtonListener();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //get shared preferences
     }
 
@@ -59,6 +71,7 @@ public class CreateEventActivity extends ActionBarActivity {
         editTextEventLocation = (EditText) findViewById(R.id.editTextEventName);
         buttonSelectImage = (Button) findViewById(R.id.buttonSelectImage);
         buttonCreateEvent = (Button) findViewById(R.id.buttonCreateEvent);
+        imageViewImage = (ImageView) findViewById(R.id.imageViewImage);
     }
 
     private void selectImageButtonListener()
@@ -71,13 +84,15 @@ public class CreateEventActivity extends ActionBarActivity {
                         .setItems(R.array.select_image_dialog_array, new DialogInterface.OnClickListener() {
                                             public void onClick (DialogInterface dialog,int which){
                                                 if (which == 0) {
+                                                    REQUEST_FROM_CAMERA = 1;
                                                     dispatchTakePictureIntent();
                                                 }
                                                 if (which == 1) {
+                                                    REQUEST_FROM_GALLERY = 1;
                                                     dispatchGalleryIntent();
                                                 }
                                                 if (which == 2) {
-
+                                                    /// Add cancel
                                                 }
                                             }
                                         }
@@ -86,7 +101,6 @@ public class CreateEventActivity extends ActionBarActivity {
                 builder.show();
             }
         });
-
     }
 
     private void dispatchTakePictureIntent() {
@@ -94,6 +108,44 @@ public class CreateEventActivity extends ActionBarActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && REQUEST_FROM_CAMERA == 1) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            imageViewImage.setImageBitmap(imageBitmap);
+            imageViewImage.setAdjustViewBounds(true);
+        }
+        else if (requestCode == REQUEST_SELECT_FILE && resultCode == RESULT_OK && REQUEST_FROM_GALLERY == 1)
+        {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            imageViewImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            imageViewImage.setAdjustViewBounds(true);
+            setPic(picturePath);
+        }
+    }
+
+    private void setPic(String picturePath) {
+        Bitmap bm;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(picturePath, options);
+        final int REQUIRED_SIZE = 200;
+        int scale = 1;
+        while (options.outWidth / scale / 2 >= REQUIRED_SIZE && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+            scale *= 2;
+        options.inSampleSize = scale;
+        options.inJustDecodeBounds = false;
+        bm = BitmapFactory.decodeFile(picturePath, options);
+        imageViewImage.setImageBitmap(bm);
     }
 
     private void dispatchGalleryIntent()
@@ -167,14 +219,10 @@ public class CreateEventActivity extends ActionBarActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+            return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -202,14 +250,10 @@ public class CreateEventActivity extends ActionBarActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+            return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -224,5 +268,15 @@ public class CreateEventActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         endActivity();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }
